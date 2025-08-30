@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Interactiva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .calculadora {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .pantalla {
+            width: 240px;
+            height: 60px;
+            background: #222;
+            color: #fff;
+            font-size: 24px;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: right;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: repeat(4, 60px);
+            gap: 10px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #e0e0e0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #d1d1d1;
+        }
+
+        button.operador {
+            background: #4cafef;
+            color: white;
+        }
+
+        button.operador:hover {
+            background: #3a9bd9;
+        }
+
+        button.igual {
+            background: #4caf50;
+            color: white;
+            grid-column: span 2;
+        }
+
+        button.igual:hover {
+            background: #3e8e41;
+        }
+
+        button.clear {
+            background: #f44336;
+            color: white;
+        }
+
+        button.clear:hover {
+            background: #d32f2f;
+        }
+
+        .historial {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 200px;
+        }
+
+        .historial h3 {
+            margin-top: 0;
+        }
+
+        .historial ul {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .historial li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Calculadora -->
+        <div class="calculadora">
+            <div class="pantalla" id="pantalla">0</div>
+            <div class="botones">
+                <button class="clear">C</button>
+                <button>/</button>
+                <button>*</button>
+                <button class="operador">-</button>
+
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button class="operador">+</button>
+
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button>.</button>
+
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button class="igual">=</button>
+
+                <button style="grid-column: span 2;">0</button>
+            </div>
+        </div>
+
+        <!-- Historial -->
+        <div class="historial">
+            <h3>Historial</h3>
+            <ul id="historial"></ul>
+        </div>
+    </div>
+
+    <script>
+        const pantalla = document.getElementById("pantalla");
+        const botones = document.querySelectorAll("button");
+        const historial = document.getElementById("historial");
+
+        let operacion = "";
+
+        botones.forEach(boton => {
+            boton.addEventListener("click", () => {
+                if (boton.textContent === "C") {
+                    operacion = "";
+                    pantalla.textContent = "0";
+                } else if (boton.textContent === "=") {
+                    try {
+                        let resultado = eval(operacion);
+                        historial.innerHTML += `<li>${operacion} = ${resultado}</li>`;
+                        pantalla.textContent = resultado;
+                        operacion = resultado;
+                    } catch {
+                        pantalla.textContent = "Error";
+                        operacion = "";
+                    }
+                } else {
+                    if (pantalla.textContent === "0" && !isNaN(boton.textContent)) {
+                        operacion = boton.textContent;
+                    } else {
+                        operacion += boton.textContent;
+                    }
+                    pantalla.textContent = operacion;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
